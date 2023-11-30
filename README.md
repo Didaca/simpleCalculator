@@ -1,1 +1,1 @@
-# Simple Calculator created with TypeScript.
+# A simple Calculator built with TypeScript.
