@@ -1,0 +1,92 @@
+:root {
+    --body: #e9d8a6;
+    --main: #4f5d75;
+    --second: #ef8354;
+    --screen: #fff;
+}
+
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--body);
+}
+
+.calculator {
+    border: 2px solid;
+    background-color: var(--main);
+    border-radius: 24px;
+    width: 400px;
+    height: 600px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: center;
+    flex: 1 1 1;
+    row-gap: 36px;
+}
+
+.screen-wrapper {
+    background-color: var(--screen);
+    border-radius: 24px;
+    width: 100%;
+    height: 12%;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+
+}
+
+.screen {
+    width: 100%;
+    height: 100%;
+    text-align: right;
+    padding: 12px;
+    font-size: 36px;
+    overflow: hidden;
+    color: var(--second);
+}
+
+.btns-wrapper {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    grid-template-areas:
+    '. . . .'
+    '. . . .'
+    '. . . .'
+    '. . . btn-e'
+    'btn-ex btn-ex . btn-e';
+}
+
+.btn {
+    border-radius: 24px;
+    font-size: 24px;
+    background-color: var(--screen);
+    color: var(--second);
+}
+
+.btn-e {
+    grid-area: btn-e;
+}
+
+.btn-ex {
+    grid-area: btn-ex;
+}
+
+.btn span {
+    top: 26px;
+    left: 30px;
+    color: var(--second);
+}
