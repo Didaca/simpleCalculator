@@ -1,7 +1,5 @@
 "use strict";
 function simpleCalculator() {
-    let a;
-    let b;
     const zero = '0';
     const screenElement = document.getElementById('screen');
     const clearElement = document.querySelector('.clear');
@@ -14,16 +12,16 @@ function simpleCalculator() {
     const pointElement = document.querySelector('.point');
     const numbersElement = [...Array.from(document.querySelectorAll('.int'))];
     const sum = (a, b) => {
-        return a + b;
+        screenElement.textContent = String(a + b);
     };
     const subtract = (a, b) => {
-        return a - b;
+        screenElement.textContent = String(a - b);
     };
     const multiplying = (a, b) => {
-        return a * b;
+        screenElement.textContent = String(a * b);
     };
     const divide = (a, b) => {
-        return a / b;
+        screenElement.textContent = String(a / b);
     };
     const math_sign = (a) => {
         if (a.startsWith('-')) {
@@ -66,6 +64,29 @@ function simpleCalculator() {
         const value = String(screenElement.textContent);
         showResult(math_sign(value));
     };
+    const result = () => {
+        let value = screenElement.textContent;
+        if (value?.includes('+')) {
+            let [a, b] = value.split('+');
+            sum(Number(a), Number(b));
+        }
+        ;
+        if (value?.includes('-')) {
+            let [a, b] = value.split('-');
+            subtract(Number(a), Number(b));
+        }
+        ;
+        if (value?.includes('*')) {
+            let [a, b] = value.split('*');
+            multiplying(Number(a), Number(b));
+        }
+        ;
+        if (value?.includes('/')) {
+            let [a, b] = value.split('/');
+            divide(Number(a), Number(b));
+        }
+        ;
+    };
     clearElement.addEventListener('click', clear);
     plus_minusElement.addEventListener('click', goPlus_Minus);
     pointElement.addEventListener('click', addComa);
@@ -76,6 +97,7 @@ function simpleCalculator() {
     subElement.addEventListener('click', addSymbol);
     multiplyingElement.addEventListener('click', addSymbol);
     divideElement.addEventListener('click', addSymbol);
+    resultElement.addEventListener('click', result);
 }
 ;
 simpleCalculator();

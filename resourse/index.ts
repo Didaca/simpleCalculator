@@ -1,7 +1,5 @@
 function simpleCalculator() {
 
-    let a: number;
-    let b: number;
     const zero: string = '0';
 
     const screenElement = document.getElementById('screen') as HTMLParagraphElement;
@@ -20,20 +18,20 @@ function simpleCalculator() {
     /* base functions */
     
     /* -----------math. operations---------- */
-    const sum = (a: number, b: number):number => {
-        return a + b
+    const sum = (a: number, b: number):void => {
+        screenElement.textContent = String(a + b);
       };
     
-    const subtract = (a: number, b: number): number => {
-    return a - b
+    const subtract = (a: number, b: number):void => {
+        screenElement.textContent = String(a - b);
     };
     
-    const multiplying = (a: number, b: number):number => {
-        return a * b
+    const multiplying = (a: number, b: number):void => {
+        screenElement.textContent = String(a * b);
     };
     
-    const divide = (a: number, b: number): number => {
-        return a / b
+    const divide = (a: number, b: number):void => {
+        screenElement.textContent = String(a / b);
     };
     
     /* ------add/remove sign------ */
@@ -105,6 +103,30 @@ function simpleCalculator() {
         showResult(math_sign(value));
    }
 
+
+   const result = () => {
+        let value = screenElement.textContent;
+
+        if (value?.includes('+')) { 
+            let [a, b] = value.split('+');
+            sum(Number(a), Number(b));
+        };
+
+        if (value?.includes('-')) { 
+            let [a, b] = value.split('-');
+            subtract(Number(a), Number(b));
+        };
+        if (value?.includes('*')) { 
+            let [a, b] = value.split('*');
+            multiplying(Number(a), Number(b));
+        };
+        if (value?.includes('/')) { 
+            let [a, b] = value.split('/');
+            divide(Number(a), Number(b));
+        };
+   };
+
+
    /* add Events*/
    clearElement.addEventListener('click', clear);
    
@@ -120,6 +142,7 @@ function simpleCalculator() {
    subElement.addEventListener('click', addSymbol);
    multiplyingElement.addEventListener('click', addSymbol);
    divideElement.addEventListener('click', addSymbol);
+   resultElement.addEventListener('click', result);
 
 
    
