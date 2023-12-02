@@ -70,6 +70,7 @@ body {
 }
 
 .btn {
+    border: none;
     border-radius: 24px;
     font-size: 24px;
     background-color: var(--screen);
@@ -88,4 +89,13 @@ body {
     top: 26px;
     left: 30px;
     color: var(--second);
+}
+
+.btn:hover {
+    background-color: #ef8354;
+    box-shadow: 0 0 12px #ef8c61, 0 0 24px #f29d79;
+}
+
+.btn:hover span {
+    color: #4f5d75;
 }

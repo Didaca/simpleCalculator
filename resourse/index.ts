@@ -45,6 +45,7 @@ function simpleCalculator() {
         return '-' + a;
        };
     
+    
     const addNumber = (ev: Event) => {
         const new_value = ev.target as HTMLButtonElement;
         const old_v = screenElement.textContent;
