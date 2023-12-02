@@ -18,20 +18,37 @@ function simpleCalculator() {
     /* base functions */
     
     /* -----------math. operations---------- */
+
+    const checkLengthResult = (result: string) => {
+        if (result.length > 17) {
+            screenElement.textContent = result.slice(0, 17);
+        }
+        else {
+
+            screenElement.textContent = result 
+        }
+    };
+
+
     const sum = (a: number, b: number):void => {
-        screenElement.textContent = String(a + b);
+        let result = String(a + b);
+        checkLengthResult(result);
       };
     
     const subtract = (a: number, b: number):void => {
-        screenElement.textContent = String(a - b);
+        let result = String(a - b);
+        checkLengthResult(result);
+               
     };
     
     const multiplying = (a: number, b: number):void => {
-        screenElement.textContent = String(a * b);
+        let result = String(a * b);
+        checkLengthResult(result);
     };
     
     const divide = (a: number, b: number):void => {
-        screenElement.textContent = String(a / b);
+        let result = String(a / b);
+        checkLengthResult(result);               
     };
     
     /* ------add/remove sign------ */
@@ -42,7 +59,7 @@ function simpleCalculator() {
             return a.slice(1);
         }
         
-        return '-' + a;
+        return '-'.concat(a);
        };
     
     
@@ -62,15 +79,31 @@ function simpleCalculator() {
                 showResult(String(sum));
             }
         }
-    }
+    };
 
     const addComa = () => {
         
         const value = screenElement.textContent;
+        let count_points = 0;
 
-        if (!value?.includes('.')) {
+        if (value) {
+            for (let i = 0; i < value.length; i++) {
+                if (value[i] === '.') {
+                    count_points ++;
+                };
+                
+            };
+        };
 
-            showResult(screenElement.textContent + '.');
+        if (!value?.includes('.') || value?.includes('+') 
+        || value?.includes('-') || value?.includes('*') 
+        || value?.includes('/')) {
+
+            if (count_points < 2){
+
+                showResult(screenElement.textContent + '.');
+            }
+
         }
 
     };
@@ -102,9 +135,9 @@ function simpleCalculator() {
         const value = String(screenElement.textContent);
     
         showResult(math_sign(value));
-   }
+   };
 
-
+   /* display the result on the screen */
    const result = () => {
         let value = screenElement.textContent;
 
@@ -150,5 +183,4 @@ function simpleCalculator() {
 };
 
 
-
-simpleCalculator()
+simpleCalculator();

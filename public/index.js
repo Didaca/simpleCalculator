@@ -11,23 +11,35 @@ function simpleCalculator() {
     const resultElement = document.querySelector('.btn-e');
     const pointElement = document.querySelector('.point');
     const numbersElement = [...Array.from(document.querySelectorAll('.int'))];
+    const checkLengthResult = (result) => {
+        if (result.length > 17) {
+            screenElement.textContent = result.slice(0, 17);
+        }
+        else {
+            screenElement.textContent = result;
+        }
+    };
     const sum = (a, b) => {
-        screenElement.textContent = String(a + b);
+        let result = String(a + b);
+        checkLengthResult(result);
     };
     const subtract = (a, b) => {
-        screenElement.textContent = String(a - b);
+        let result = String(a - b);
+        checkLengthResult(result);
     };
     const multiplying = (a, b) => {
-        screenElement.textContent = String(a * b);
+        let result = String(a * b);
+        checkLengthResult(result);
     };
     const divide = (a, b) => {
-        screenElement.textContent = String(a / b);
+        let result = String(a / b);
+        checkLengthResult(result);
     };
     const math_sign = (a) => {
         if (a.startsWith('-')) {
             return a.slice(1);
         }
-        return '-' + a;
+        return '-'.concat(a);
     };
     const addNumber = (ev) => {
         const new_value = ev.target;
@@ -44,8 +56,23 @@ function simpleCalculator() {
     };
     const addComa = () => {
         const value = screenElement.textContent;
-        if (!value?.includes('.')) {
-            showResult(screenElement.textContent + '.');
+        let count_points = 0;
+        if (value) {
+            for (let i = 0; i < value.length; i++) {
+                if (value[i] === '.') {
+                    count_points++;
+                }
+                ;
+            }
+            ;
+        }
+        ;
+        if (!value?.includes('.') || value?.includes('+')
+            || value?.includes('-') || value?.includes('*')
+            || value?.includes('/')) {
+            if (count_points < 2) {
+                showResult(screenElement.textContent + '.');
+            }
         }
     };
     const addSymbol = (ev) => {
