@@ -1,6 +1,7 @@
 function simpleCalculator() {
 
     const zero: string = '0';
+    const result_letters_length = 5;
 
     const screenElement = document.getElementById('screen') as HTMLParagraphElement;
     const clearElement = document.querySelector('.clear') as HTMLButtonElement;
@@ -20,14 +21,30 @@ function simpleCalculator() {
     /* -----------math. operations---------- */
 
     const checkLengthResult = (result: string) => {
-        if (result.length > 17) {
-            screenElement.textContent = result.slice(0, 17);
+        if (result.length > result_letters_length) {
+            screenElement.textContent = Number(result).toExponential(result_letters_length);
         }
         else {
 
             screenElement.textContent = result 
         }
     };
+
+    const toCheckSymbols = (symbol: string): number => {
+        const value = screenElement.textContent;
+        let count_points = 0;
+
+        if (value) {
+            for (let i = 0; i < value.length; i++) {
+                if (value[i] === symbol) {
+                    count_points ++;
+                };
+                
+            };
+        };
+
+        return count_points;
+    }
 
 
     const sum = (a: number, b: number):void => {
@@ -84,16 +101,7 @@ function simpleCalculator() {
     const addComa = () => {
         
         const value = screenElement.textContent;
-        let count_points = 0;
-
-        if (value) {
-            for (let i = 0; i < value.length; i++) {
-                if (value[i] === '.') {
-                    count_points ++;
-                };
-                
-            };
-        };
+        let count_points = toCheckSymbols('.');
 
         if (!value?.includes('.') || value?.includes('+') 
         || value?.includes('-') || value?.includes('*') 
@@ -113,7 +121,13 @@ function simpleCalculator() {
         const symbol = symbolElement.textContent;
         const compare = screenElement.textContent;
 
+        const count_minus = toCheckSymbols('-');
+
         if (symbol && !compare?.includes('+') && !compare?.includes('-') && !compare?.includes('*') && !compare?.includes('/')) {
+
+            screenElement.textContent += symbol
+        }
+        if (symbol && compare?.startsWith('-') && !compare?.includes('+') && !compare?.includes('*') && !compare?.includes('/') && count_minus < 2) {
 
             screenElement.textContent += symbol
         }

@@ -1,6 +1,7 @@
 "use strict";
 function simpleCalculator() {
     const zero = '0';
+    const result_letters_length = 5;
     const screenElement = document.getElementById('screen');
     const clearElement = document.querySelector('.clear');
     const plus_minusElement = document.querySelector('.plus-minus');
@@ -12,12 +13,27 @@ function simpleCalculator() {
     const pointElement = document.querySelector('.point');
     const numbersElement = [...Array.from(document.querySelectorAll('.int'))];
     const checkLengthResult = (result) => {
-        if (result.length > 17) {
-            screenElement.textContent = result.slice(0, 17);
+        if (result.length > result_letters_length) {
+            screenElement.textContent = Number(result).toExponential(result_letters_length);
         }
         else {
             screenElement.textContent = result;
         }
+    };
+    const toCheckSymbols = (symbol) => {
+        const value = screenElement.textContent;
+        let count_points = 0;
+        if (value) {
+            for (let i = 0; i < value.length; i++) {
+                if (value[i] === symbol) {
+                    count_points++;
+                }
+                ;
+            }
+            ;
+        }
+        ;
+        return count_points;
     };
     const sum = (a, b) => {
         let result = String(a + b);
@@ -56,17 +72,7 @@ function simpleCalculator() {
     };
     const addComa = () => {
         const value = screenElement.textContent;
-        let count_points = 0;
-        if (value) {
-            for (let i = 0; i < value.length; i++) {
-                if (value[i] === '.') {
-                    count_points++;
-                }
-                ;
-            }
-            ;
-        }
-        ;
+        let count_points = toCheckSymbols('.');
         if (!value?.includes('.') || value?.includes('+')
             || value?.includes('-') || value?.includes('*')
             || value?.includes('/')) {
@@ -79,7 +85,11 @@ function simpleCalculator() {
         const symbolElement = ev.target;
         const symbol = symbolElement.textContent;
         const compare = screenElement.textContent;
+        const count_minus = toCheckSymbols('-');
         if (symbol && !compare?.includes('+') && !compare?.includes('-') && !compare?.includes('*') && !compare?.includes('/')) {
+            screenElement.textContent += symbol;
+        }
+        if (symbol && compare?.startsWith('-') && !compare?.includes('+') && !compare?.includes('*') && !compare?.includes('/') && count_minus < 2) {
             screenElement.textContent += symbol;
         }
     };
