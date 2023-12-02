@@ -36,20 +36,20 @@ function simpleCalculator() {
         return count_points;
     };
     const sum = (a, b) => {
-        let result = String(a + b);
-        checkLengthResult(result);
+        let result = a + b;
+        checkLengthResult(String(result));
     };
     const subtract = (a, b) => {
-        let result = String(a - b);
-        checkLengthResult(result);
+        let result = a - b;
+        checkLengthResult(String(result));
     };
     const multiplying = (a, b) => {
-        let result = String(a * b);
-        checkLengthResult(result);
+        let result = a * b;
+        checkLengthResult(String(result));
     };
     const divide = (a, b) => {
-        let result = String(a / b);
-        checkLengthResult(result);
+        let result = a / b;
+        checkLengthResult(String(result));
     };
     const math_sign = (a) => {
         if (a.startsWith('-')) {
@@ -103,22 +103,30 @@ function simpleCalculator() {
     };
     const result = () => {
         let value = screenElement.textContent;
+        let count_minus = 0;
+        if (value) {
+            count_minus = toCheckSymbols('-');
+        }
+        ;
         if (value?.includes('+')) {
             let [a, b] = value.split('+');
             sum(Number(a), Number(b));
         }
-        ;
-        if (value?.includes('-')) {
-            let [a, b] = value.split('-');
-            subtract(Number(a), Number(b));
+        else if (value?.includes('-')) {
+            if (count_minus == 2) {
+                let [_, a, b] = value.split('-');
+                subtract(Number('-'.concat(a)), Number(b));
+            }
+            else {
+                let [a, b] = value.split('-');
+                subtract(Number(a), Number(b));
+            }
         }
-        ;
-        if (value?.includes('*')) {
+        else if (value?.includes('*')) {
             let [a, b] = value.split('*');
             multiplying(Number(a), Number(b));
         }
-        ;
-        if (value?.includes('/')) {
+        else if (value?.includes('/')) {
             let [a, b] = value.split('/');
             divide(Number(a), Number(b));
         }

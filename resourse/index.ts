@@ -18,9 +18,8 @@ function simpleCalculator() {
     
     /* base functions */
     
-    /* -----------math. operations---------- */
-
     const checkLengthResult = (result: string) => {
+        
         if (result.length > result_letters_length) {
             screenElement.textContent = Number(result).toExponential(result_letters_length);
         }
@@ -47,25 +46,27 @@ function simpleCalculator() {
     }
 
 
+    /* math operations */
+
     const sum = (a: number, b: number):void => {
-        let result = String(a + b);
-        checkLengthResult(result);
+        let result = a + b;
+        checkLengthResult(String(result));
       };
     
     const subtract = (a: number, b: number):void => {
-        let result = String(a - b);
-        checkLengthResult(result);
+        let result = a - b;
+        checkLengthResult(String(result));
                
     };
     
     const multiplying = (a: number, b: number):void => {
-        let result = String(a * b);
-        checkLengthResult(result);
+        let result = a * b;
+        checkLengthResult(String(result));
     };
     
     const divide = (a: number, b: number):void => {
-        let result = String(a / b);
-        checkLengthResult(result);               
+        let result = a / b;
+        checkLengthResult(String(result));               
     };
     
     /* ------add/remove sign------ */
@@ -79,6 +80,7 @@ function simpleCalculator() {
         return '-'.concat(a);
        };
     
+    /* ------add number------ */
     
     const addNumber = (ev: Event) => {
         const new_value = ev.target as HTMLButtonElement;
@@ -97,6 +99,9 @@ function simpleCalculator() {
             }
         }
     };
+
+
+    /* ------add coma for float number------ */
 
     const addComa = () => {
         
@@ -154,21 +159,34 @@ function simpleCalculator() {
    /* display the result on the screen */
    const result = () => {
         let value = screenElement.textContent;
+        let count_minus: number = 0;
+
+
+        if (value) {
+            count_minus = toCheckSymbols('-');
+        };
 
         if (value?.includes('+')) { 
             let [a, b] = value.split('+');
             sum(Number(a), Number(b));
-        };
+        }
+        else if (value?.includes('-')) { 
 
-        if (value?.includes('-')) { 
-            let [a, b] = value.split('-');
-            subtract(Number(a), Number(b));
-        };
-        if (value?.includes('*')) { 
+            if (count_minus == 2) {
+                let [_, a, b] = value.split('-');
+                subtract(Number('-'.concat(a)), Number(b));
+            }
+            else {
+                let [a, b] = value.split('-');
+                subtract(Number(a), Number(b));
+            }
+
+        }
+        else if (value?.includes('*')) { 
             let [a, b] = value.split('*');
             multiplying(Number(a), Number(b));
-        };
-        if (value?.includes('/')) { 
+        }
+        else if (value?.includes('/')) { 
             let [a, b] = value.split('/');
             divide(Number(a), Number(b));
         };
