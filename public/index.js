@@ -1,7 +1,7 @@
-"use strict";
+import { toCheckSymbols, showResult, math_sign } from './modules/base_functions.js';
+import { divide, multiplying, subtract, sum } from './modules/math_operations.js';
 function simpleCalculator() {
     const zero = '0';
-    const result_letters_length = 5;
     const screenElement = document.getElementById('screen');
     const clearElement = document.querySelector('.clear');
     const plus_minusElement = document.querySelector('.plus-minus');
@@ -12,72 +12,16 @@ function simpleCalculator() {
     const resultElement = document.querySelector('.btn-e');
     const pointElement = document.querySelector('.point');
     const numbersElement = [...Array.from(document.querySelectorAll('.int'))];
-    const checkLengthResult = (result) => {
-        if (result.length > result_letters_length) {
-            screenElement.textContent = Number(result).toExponential(result_letters_length);
-        }
-        else {
-            screenElement.textContent = result;
-        }
-    };
-    const toCheckSymbols = (symbol) => {
-        const value = screenElement.textContent;
-        let count_points = 0;
-        if (value) {
-            for (let i = 0; i < value.length; i++) {
-                if (value[i] === symbol) {
-                    count_points++;
-                }
-                ;
-            }
-            ;
-        }
-        ;
-        return count_points;
-    };
-    const sum = (a, b) => {
-        let result = a + b;
-        checkLengthResult(String(result));
-    };
-    const subtract = (a, b) => {
-        let result = a - b;
-        checkLengthResult(String(result));
-    };
-    const multiplying = (a, b) => {
-        let result = a * b;
-        checkLengthResult(String(result));
-    };
-    const divide = (a, b) => {
-        let result = a / b;
-        checkLengthResult(String(result));
-    };
-    const math_sign = (a) => {
-        if (a.startsWith('-')) {
-            return a.slice(1);
-        }
-        return '-'.concat(a);
-    };
     const addNumber = (ev) => {
         const new_value = ev.target;
         const old_v = screenElement.textContent;
         if (old_v) {
             const sum = old_v + new_value.textContent;
             if (sum.startsWith('0')) {
-                showResult(String(sum.slice(1)));
+                showResult(String(sum.slice(1)), screenElement);
             }
             else {
-                showResult(String(sum));
-            }
-        }
-    };
-    const addComa = () => {
-        const value = screenElement.textContent;
-        let count_points = toCheckSymbols('.');
-        if (!value?.includes('.') || value?.includes('+')
-            || value?.includes('-') || value?.includes('*')
-            || value?.includes('/')) {
-            if (count_points < 2) {
-                showResult(screenElement.textContent + '.');
+                showResult(String(sum), screenElement);
             }
         }
     };
@@ -85,7 +29,7 @@ function simpleCalculator() {
         const symbolElement = ev.target;
         const symbol = symbolElement.textContent;
         const compare = screenElement.textContent;
-        const count_minus = toCheckSymbols('-');
+        const count_minus = toCheckSymbols('-', screenElement);
         if (symbol && !compare?.includes('+') && !compare?.includes('-') && !compare?.includes('*') && !compare?.includes('/')) {
             screenElement.textContent += symbol;
         }
@@ -93,42 +37,52 @@ function simpleCalculator() {
             screenElement.textContent += symbol;
         }
     };
-    const showResult = (value) => { screenElement.textContent = value; };
+    const addComa = () => {
+        const value = screenElement.textContent;
+        let count_points = toCheckSymbols('.', screenElement);
+        if (!value?.includes('.') || value?.includes('+')
+            || value?.includes('-') || value?.includes('*')
+            || value?.includes('/')) {
+            if (count_points < 2) {
+                showResult(screenElement.textContent + '.', screenElement);
+            }
+        }
+    };
     const clear = () => {
-        showResult(zero);
+        showResult(zero, screenElement);
     };
     const goPlus_Minus = () => {
         const value = String(screenElement.textContent);
-        showResult(math_sign(value));
+        showResult(math_sign(value), screenElement);
     };
     const result = () => {
         let value = screenElement.textContent;
         let count_minus = 0;
         if (value) {
-            count_minus = toCheckSymbols('-');
+            count_minus = toCheckSymbols('-', screenElement);
         }
         ;
         if (value?.includes('+')) {
             let [a, b] = value.split('+');
-            sum(Number(a), Number(b));
+            sum(Number(a), Number(b), screenElement);
         }
-        else if (value?.includes('-')) {
+        else if (value?.includes('-') && !value?.includes('*') && !value?.includes('/')) {
             if (count_minus == 2) {
                 let [_, a, b] = value.split('-');
-                subtract(Number('-'.concat(a)), Number(b));
+                subtract(Number('-'.concat(a)), Number(b), screenElement);
             }
             else {
                 let [a, b] = value.split('-');
-                subtract(Number(a), Number(b));
+                subtract(Number(a), Number(b), screenElement);
             }
         }
         else if (value?.includes('*')) {
             let [a, b] = value.split('*');
-            multiplying(Number(a), Number(b));
+            multiplying(Number(a), Number(b), screenElement);
         }
         else if (value?.includes('/')) {
             let [a, b] = value.split('/');
-            divide(Number(a), Number(b));
+            divide(Number(a), Number(b), screenElement);
         }
         ;
     };

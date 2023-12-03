@@ -1,7 +1,14 @@
+import {
+    toCheckSymbols,
+    showResult, 
+    math_sign} from './modules/base_functions.js';
+
+import { divide, multiplying, subtract, sum } from './modules/math_operations.js';
+
+
 function simpleCalculator() {
 
     const zero: string = '0';
-    const result_letters_length = 5;
 
     const screenElement = document.getElementById('screen') as HTMLParagraphElement;
     const clearElement = document.querySelector('.clear') as HTMLButtonElement;
@@ -16,70 +23,7 @@ function simpleCalculator() {
   
     const numbersElement = [...Array.from(document.querySelectorAll('.int')!)];
     
-    /* base functions */
-    
-    const checkLengthResult = (result: string) => {
         
-        if (result.length > result_letters_length) {
-            screenElement.textContent = Number(result).toExponential(result_letters_length);
-        }
-        else {
-
-            screenElement.textContent = result 
-        }
-    };
-
-    const toCheckSymbols = (symbol: string): number => {
-        const value = screenElement.textContent;
-        let count_points = 0;
-
-        if (value) {
-            for (let i = 0; i < value.length; i++) {
-                if (value[i] === symbol) {
-                    count_points ++;
-                };
-                
-            };
-        };
-
-        return count_points;
-    }
-
-
-    /* math operations */
-
-    const sum = (a: number, b: number):void => {
-        let result = a + b;
-        checkLengthResult(String(result));
-      };
-    
-    const subtract = (a: number, b: number):void => {
-        let result = a - b;
-        checkLengthResult(String(result));
-               
-    };
-    
-    const multiplying = (a: number, b: number):void => {
-        let result = a * b;
-        checkLengthResult(String(result));
-    };
-    
-    const divide = (a: number, b: number):void => {
-        let result = a / b;
-        checkLengthResult(String(result));               
-    };
-    
-    /* ------add/remove sign------ */
-    
-    const math_sign = (a: string): string => {
-        
-        if (a.startsWith('-')) {
-            return a.slice(1);
-        }
-        
-        return '-'.concat(a);
-       };
-    
     /* ------add number------ */
     
     const addNumber = (ev: Event) => {
@@ -91,42 +35,24 @@ function simpleCalculator() {
 
             if (sum.startsWith('0')) {
 
-                showResult(String(sum.slice(1)));    
+                showResult(String(sum.slice(1)), screenElement);    
             }
             else {
 
-                showResult(String(sum));
+                showResult(String(sum), screenElement);
             }
         }
     };
 
 
-    /* ------add coma for float number------ */
-
-    const addComa = () => {
-        
-        const value = screenElement.textContent;
-        let count_points = toCheckSymbols('.');
-
-        if (!value?.includes('.') || value?.includes('+') 
-        || value?.includes('-') || value?.includes('*') 
-        || value?.includes('/')) {
-
-            if (count_points < 2){
-
-                showResult(screenElement.textContent + '.');
-            }
-
-        }
-
-    };
+     /* ------add math symbol------ */
 
     const addSymbol = (ev: Event) => {
         const symbolElement = ev.target as HTMLButtonElement;
         const symbol = symbolElement.textContent;
         const compare = screenElement.textContent;
 
-        const count_minus = toCheckSymbols('-');
+        const count_minus = toCheckSymbols('-', screenElement);
 
         if (symbol && !compare?.includes('+') && !compare?.includes('-') && !compare?.includes('*') && !compare?.includes('/')) {
 
@@ -139,13 +65,29 @@ function simpleCalculator() {
 
     };
 
-    
-    const showResult = (value: string) => { screenElement.textContent = value };
+    /* ------add coma for float number------ */
 
+    const addComa = () => {
+            
+        const value = screenElement.textContent;
+        let count_points = toCheckSymbols('.', screenElement);
+
+        if (!value?.includes('.') || value?.includes('+') 
+        || value?.includes('-') || value?.includes('*') 
+        || value?.includes('/')) {
+
+            if (count_points < 2){
+
+                showResult(screenElement.textContent + '.', screenElement);
+            }
+
+        }
+
+    };
    
     /* clear screen function*/
    const clear = ():void => {
-       showResult(zero);
+       showResult(zero, screenElement);
    };
 
 
@@ -153,7 +95,7 @@ function simpleCalculator() {
 
         const value = String(screenElement.textContent);
     
-        showResult(math_sign(value));
+        showResult(math_sign(value), screenElement);
    };
 
    /* display the result on the screen */
@@ -163,32 +105,32 @@ function simpleCalculator() {
 
 
         if (value) {
-            count_minus = toCheckSymbols('-');
+            count_minus = toCheckSymbols('-', screenElement);
         };
 
         if (value?.includes('+')) { 
             let [a, b] = value.split('+');
-            sum(Number(a), Number(b));
+            sum(Number(a), Number(b), screenElement);
         }
-        else if (value?.includes('-')) { 
+        else if (value?.includes('-') && !value?.includes('*') && !value?.includes('/')) { 
 
             if (count_minus == 2) {
                 let [_, a, b] = value.split('-');
-                subtract(Number('-'.concat(a)), Number(b));
+                subtract(Number('-'.concat(a)), Number(b), screenElement);
             }
             else {
                 let [a, b] = value.split('-');
-                subtract(Number(a), Number(b));
+                subtract(Number(a), Number(b), screenElement);
             }
 
         }
         else if (value?.includes('*')) { 
             let [a, b] = value.split('*');
-            multiplying(Number(a), Number(b));
+            multiplying(Number(a), Number(b), screenElement);
         }
         else if (value?.includes('/')) { 
             let [a, b] = value.split('/');
-            divide(Number(a), Number(b));
+            divide(Number(a), Number(b), screenElement);
         };
    };
 
